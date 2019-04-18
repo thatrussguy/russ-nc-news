@@ -298,7 +298,10 @@ describe("Data formatting helpers", () => {
           created_at: 1468087638932
         }
       ];
-      const actual = formatComments(data);
+      const titlesAndIds = {
+        "The People Tracking Every Touch, Pass And Tackle in the World Cup": 18
+      };
+      const actual = formatComments(data, titlesAndIds);
       expect(actual[0].author).to.equal(data[0].created_by);
     });
     it("renames belongs_to to article_id and replaces the value with the matching article id", () => {
@@ -313,11 +316,31 @@ describe("Data formatting helpers", () => {
           created_at: 1468087638932
         }
       ];
-      const refObj = {
+      const titlesAndIds = {
         "The People Tracking Every Touch, Pass And Tackle in the World Cup": 18
       };
-      const actual = formatComments(data, refObj, "created_by", "author");
+      const actual = formatComments(data, titlesAndIds, "created_by", "author");
       expect(actual[0].article_id).to.equal(18);
+    });
+    it("formats the dates", () => {
+      const data = [
+        {
+          body:
+            "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
+          belongs_to:
+            "The People Tracking Every Touch, Pass And Tackle in the World Cup",
+          created_by: "tickle122",
+          votes: -1,
+          created_at: 1468087638932
+        }
+      ];
+      const titlesAndIds = {
+        "The People Tracking Every Touch, Pass And Tackle in the World Cup": 18
+      };
+      const actual = formatComments(data, titlesAndIds, "created_by", "author");
+      expect(actual[0].created_at.toString()).to.equal(
+        "Sat Jul 09 2016 19:07:18 GMT+0100 (British Summer Time)"
+      );
     });
   });
 });

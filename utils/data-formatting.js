@@ -21,16 +21,16 @@ const formatData = (array, refObj, oldKey, newKey) => {
   });
 };
 const formatComments = (commentsData, titlesAndIds) => {
-  let formattedComments = commentsData.map(object => {
-    return renameKey(object, "created_by", "author");
-  });
-  formattedComments = formatData(
-    formattedComments,
-    titlesAndIds,
-    "belongs_to",
-    "article_id"
+  return formatDates(
+    formatData(
+      commentsData.map(object => {
+        return renameKey(object, "created_by", "author");
+      }),
+      titlesAndIds,
+      "belongs_to",
+      "article_id"
+    )
   );
-  return formattedComments;
 };
 
 module.exports = {
