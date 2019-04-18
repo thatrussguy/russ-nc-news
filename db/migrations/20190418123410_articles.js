@@ -5,14 +5,12 @@ exports.up = function(knex, Promise) {
     articlesTable.string("title");
     articlesTable.string("body");
     articlesTable.integer("votes").defaultTo(0);
-    articlesTable.string("topic").notNullable();
     articlesTable
-      .foreign("topic")
+      .string("topic")
       .references("slug")
       .inTable("topics");
-    articlesTable.string("author").notNullable();
     articlesTable
-      .foreign("author")
+      .string("author")
       .references("username")
       .inTable("users");
     articlesTable.timestamp("created_at").defaultTo(knex.fn.now());
