@@ -18,4 +18,7 @@ exports.up = function(knex, Promise) {
   });
 };
 
-exports.down = function(knex, Promise) {};
+exports.down = function(knex, Promise) {
+  console.log("removing comments tables...");
+  return knex.schema.dropTable("comments");
+};
