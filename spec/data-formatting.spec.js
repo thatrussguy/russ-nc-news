@@ -1,8 +1,8 @@
 const { expect } = require("chai");
-const { formatArticles } = require("../utils/data-formatting");
+const { formatDates } = require("../utils/data-formatting");
 
 describe("Data formatting helpers", () => {
-  describe("formatArticles()", () => {
+  describe("formatDates()", () => {
     it("reformats dates", () => {
       const data = [
         {
@@ -24,7 +24,7 @@ describe("Data formatting helpers", () => {
           created_at: new Date(1471522072389)
         }
       ];
-      const actual = formatArticles(data);
+      const actual = formatDates(data);
       expect(expected).to.deep.equal(actual);
       expect(expected[0].created_at.toString()).to.equal(
         "Thu Aug 18 2016 13:07:52 GMT+0100 (British Summer Time)"
@@ -61,7 +61,7 @@ describe("Data formatting helpers", () => {
           created_at: new Date(1471522072389)
         }
       ];
-      const actual = formatArticles(data);
+      const actual = formatDates(data);
       expect(expected).to.deep.equal(actual);
       expect(data).to.deep.equal(copyOfData);
     });
