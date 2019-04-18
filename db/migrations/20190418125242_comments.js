@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     commentsTable.string("body");
     commentsTable.integer("votes").defaultTo(0);
     commentsTable
-      .string("article_id")
+      .integer("article_id")
       .references("article_id")
       .inTable("articles");
     commentsTable
