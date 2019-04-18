@@ -10,7 +10,7 @@ const {
   formatComments
 } = require("../../utils/data-formatting");
 
-exports.seed = (knex, Promise) => {
+exports.seed = (knex, _) => {
   return knex.migrate
     .rollback()
     .then(() => knex.migrate.latest())
