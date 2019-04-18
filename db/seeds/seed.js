@@ -25,7 +25,7 @@ exports.seed = (knex, Promise) => {
           .returning("*")
       ]);
     })
-    .then(([topicsRows, usersRows]) => {
+    .then(() => {
       const formattedArticles = formatDates(articlesData);
       console.log("inserting articles data");
       return knex("articles")
