@@ -2,7 +2,7 @@ exports.up = function(knex, Promise) {
   console.log("creating comments table");
   return knex.schema.createTable("comments", commentsTable => {
     commentsTable.increments("comment_id").primary();
-    commentsTable.string("body");
+    commentsTable.string("body").notNullable();
     commentsTable.integer("votes").defaultTo(0);
     commentsTable
       .integer("article_id")
