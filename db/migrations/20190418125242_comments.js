@@ -4,14 +4,12 @@ exports.up = function(knex, Promise) {
     commentsTable.increments("comment_id").primary();
     commentsTable.string("body");
     commentsTable.integer("votes").defaultTo(0);
-    commentsTable.string("article_id").notNullable();
     commentsTable
-      .foreign("article_id")
+      .string("article_id")
       .references("article_id")
       .inTable("articles");
-    commentsTable.string("author").notNullable();
     commentsTable
-      .foreign("author")
+      .string("author")
       .references("username")
       .inTable("users");
     commentsTable.timestamp("created_at").defaultTo(knex.fn.now());
