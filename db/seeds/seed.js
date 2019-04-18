@@ -21,6 +21,11 @@ exports.seed = (knex, Promise) => {
       ]);
     })
     .then(([topicsRows, usersRows]) => {
+      // format articles
       console.log("inserting articles data");
-    });
+      return knex("articles")
+        .insert(articlesData)
+        .returning("*");
+    })
+    .then(articlesRows => console.log(articlesRows));
 };
