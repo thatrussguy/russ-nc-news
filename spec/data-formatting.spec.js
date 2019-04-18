@@ -26,6 +26,9 @@ describe("Data formatting helpers", () => {
       ];
       const actual = formatArticles(data);
       expect(expected).to.deep.equal(actual);
+      expect(expected[0].created_at.toString()).to.equal(
+        "Thu Aug 18 2016 13:07:52 GMT+0100 (British Summer Time)"
+      );
     });
     it("doesn't mutate the original array", () => {
       const data = [
