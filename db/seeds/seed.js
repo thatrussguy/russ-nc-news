@@ -10,10 +10,17 @@ exports.seed = (knex, Promise) => {
     .rollback()
     .then(() => knex.migrate.latest())
     .then(() => {
-      console.log("inserting topics data");
-      return knex("topics")
-        .insert(topicsData)
-        .returning("*");
+      console.log("inserting topics and user data");
+      return Promise.all([
+        knex("topics")
+          .insert(topicsData)
+          .returning("*"),
+        knex("users")
+          .insert(usersData)
+          .returning("*")
+      ]);
     })
-    .then(topicsRows => {});
+    .then(([topicsRows, usersRows]) => {
+      console.log({ topicsRows, usersRows });
+    });
 };
