@@ -73,6 +73,15 @@ describe("/", () => {
             });
         });
       });
+      it("PATCH status:200 increments votes by the specified amount and returns the updated article", () => {
+        return request
+          .patch("/api/articles/1")
+          .send({ inc_votes: 10 })
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.article.votes).to.equal(10);
+          });
+      });
     });
   });
 });
