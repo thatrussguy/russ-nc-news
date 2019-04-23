@@ -80,6 +80,25 @@ describe("/", () => {
               expect(body.article.votes).to.equal(110);
             });
         });
+        describe("/comments", () => {
+          it("GET status:200 returns an array of comments under key 'comments", () => {
+            return request
+              .get("/api/articles/1/comments")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body).to.contain.keys("comments");
+                expect(body.comments).to.be.an("array");
+                expect(body.comments[0]).to.contain.keys(
+                  "comment_id",
+                  "votes",
+                  "created_at",
+                  "author",
+                  "body"
+                );
+                expect(body.comments.length).to.equal(13);
+              });
+          });
+        });
       });
     });
   });
