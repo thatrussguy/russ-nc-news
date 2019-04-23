@@ -154,5 +154,24 @@ describe("/", () => {
         });
       });
     });
+    describe("/users", () => {
+      describe("/:username", () => {
+        it("GET status:200 returns a user object under key 'user'", () => {
+          return request
+            .get("/api/users/lurker")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("user");
+              expect(body.user).to.be.an("object");
+              expect(body.user).to.contain.keys(
+                "username",
+                "avatar_url",
+                "name"
+              );
+              expect(body.user.username).to.equal("lurker");
+            });
+        });
+      });
+    });
   });
 });
