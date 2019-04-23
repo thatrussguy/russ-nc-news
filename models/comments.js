@@ -19,9 +19,15 @@ const updateCommentById = (comment_id, votes) => {
     .returning("*")
     .then(([comment]) => ({ comment }));
 };
+const removeCommentById = comment_id => {
+  return connection("comments")
+    .delete()
+    .where({ comment_id });
+};
 
 module.exports = {
   selectCommentsByArticleId,
   insertCommentByArticleId,
-  updateCommentById
+  updateCommentById,
+  removeCommentById
 };

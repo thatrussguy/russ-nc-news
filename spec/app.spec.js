@@ -135,6 +135,23 @@ describe("/", () => {
               expect(body.comment.votes).to.equal(26);
             });
         });
+        it("DELETE status:204 deletes the comment and returns nothing", () => {
+          return request
+            .delete("/api/comments/1")
+            .expect(204)
+            .then(({ body }) => {
+              expect(body).to.deep.equal({});
+            })
+            .then(_ => {
+              return request
+                .patch("/api/comments/1")
+                .send({ inc_votes: 10 })
+                .expect(400)
+                .then(({ body }) => {
+                  expect(body.message).to.equal("No such comment");
+                });
+            });
+        });
       });
     });
   });
