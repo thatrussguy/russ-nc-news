@@ -6,5 +6,11 @@ const selectCommentsByArticleId = article_id => {
     .where({ article_id })
     .then(comments => ({ comments }));
 };
+const insertCommentByArticleId = (article_id, author, body) => {
+  return connection("comments")
+    .insert({ article_id, author, body })
+    .returning("*")
+    .then(([comment]) => ({ comment }));
+};
 
-module.exports = { selectCommentsByArticleId };
+module.exports = { selectCommentsByArticleId, insertCommentByArticleId };

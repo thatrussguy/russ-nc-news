@@ -98,6 +98,29 @@ describe("/", () => {
                 expect(body.comments.length).to.equal(13);
               });
           });
+          it("POST status:201 inserts a comment with username/body from the request body and returns the new comment", () => {
+            return request
+              .post("/api/articles/1/comments")
+              .send({ username: "lurker", body: "lurker's comment" })
+              .expect(201)
+              .then(({ body }) => {
+                expect(body).to.contain.keys("comment");
+                expect(body.comment).to.be.an("object");
+                expect(body.comment).to.contain.keys(
+                  "comment_id",
+                  "votes",
+                  "created_at",
+                  "author",
+                  "body",
+                  "article_id"
+                );
+                expect(body.comment.article_id).to.equal(1);
+                expect(body.comment.author).to.equal("lurker");
+                expect(body.comment.body).to.equal("lurker's comment");
+                expect(body.comment.comment_id).to.equal(19);
+                expect(body.comment.votes).to.equal(0);
+              });
+          });
         });
       });
     });
