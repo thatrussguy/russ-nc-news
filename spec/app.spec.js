@@ -21,5 +21,10 @@ describe("/", () => {
           expect(body.ok).to.equal(true);
         });
     });
+    describe("/topics", () => {
+      it("GET status:200", () => {
+        return request.get("/api/topics").expect(200);
+      });
+    });
   });
 });
