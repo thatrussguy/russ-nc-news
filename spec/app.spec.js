@@ -126,14 +126,25 @@ describe("/", () => {
     });
     describe("/comments", () => {
       describe("/:comment_id", () => {
-        it("PATCH status:200 increments votes by the amount specified by inc_votes in the body and returns the updated comment", () => {
-          return request
-            .patch("/api/comments/1")
-            .send({ inc_votes: 10 })
-            .expect(200)
-            .then(({ body }) => {
-              expect(body.comment.votes).to.equal(26);
-            });
+        describe("PATCH", () => {
+          it("status:200 increments votes by the amount specified by inc_votes in the body and returns the updated comment", () => {
+            return request
+              .patch("/api/comments/1")
+              .send({ inc_votes: 10 })
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comment.votes).to.equal(26);
+              });
+          });
+          it("status:400 if comment_id is not in database", () => {
+            return request
+              .patch("/api/comments/1000")
+              .send({ inc_votes: 10 })
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal("No such comment");
+              });
+          });
         });
         it("DELETE status:204 deletes the comment and returns nothing", () => {
           return request
