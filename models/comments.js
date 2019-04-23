@@ -12,5 +12,16 @@ const insertCommentByArticleId = (article_id, author, body) => {
     .returning("*")
     .then(([comment]) => ({ comment }));
 };
+const updateCommentById = (comment_id, votes) => {
+  return connection("comments")
+    .where({ comment_id })
+    .increment({ votes })
+    .returning("*")
+    .then(([comment]) => ({ comment }));
+};
 
-module.exports = { selectCommentsByArticleId, insertCommentByArticleId };
+module.exports = {
+  selectCommentsByArticleId,
+  insertCommentByArticleId,
+  updateCommentById
+};
