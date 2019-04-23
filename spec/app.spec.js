@@ -33,5 +33,25 @@ describe("/", () => {
           });
       });
     });
+    describe("/articles", () => {
+      it("GET status:200 returns a list of articles under key 'articles'", () => {
+        return request
+          .get("/api/articles")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body).to.contain.keys("articles");
+            expect(body.articles).to.be.an("array");
+            expect(body.articles[0]).to.contain.keys(
+              "author",
+              "title",
+              "article_id",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count"
+            );
+          });
+      });
+    });
   });
 });
