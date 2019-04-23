@@ -52,6 +52,27 @@ describe("/", () => {
             );
           });
       });
+      describe("/:article_id", () => {
+        it("GET status:200 returns an article object under key 'article", () => {
+          return request
+            .get("/api/articles/1")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("article");
+              expect(body.article).to.be.an("object");
+              expect(body.article).to.contain.keys(
+                "author",
+                "title",
+                "article_id",
+                "body",
+                "topic",
+                "created_at",
+                "votes",
+                "comment_count"
+              );
+            });
+        });
+      });
     });
   });
 });
