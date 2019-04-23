@@ -6,4 +6,4 @@ topicsRouter
   .get((req, res) => res.send({ ok: true }))
   .all(methodNotAllowed);
 
-module.exports = apiRouter;
+module.exports = topicsRouter;
