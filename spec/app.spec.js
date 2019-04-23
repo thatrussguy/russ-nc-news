@@ -5,7 +5,6 @@ const supertest = require("supertest");
 
 const app = require("../app");
 const connection = require("../db/connection");
-
 const request = supertest(app);
 
 describe("/", () => {
@@ -72,15 +71,15 @@ describe("/", () => {
               );
             });
         });
-      });
-      it("PATCH status:200 increments votes by the specified amount and returns the updated article", () => {
-        return request
-          .patch("/api/articles/1")
-          .send({ inc_votes: 10 })
-          .expect(200)
-          .then(({ body }) => {
-            expect(body.article.votes).to.equal(10);
-          });
+        it("PATCH status:200 increments votes by the amount specified by inc_votes in the body and returns the updated article", () => {
+          return request
+            .patch("/api/articles/1")
+            .send({ inc_votes: 10 })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.article.votes).to.equal(110);
+            });
+        });
       });
     });
   });
