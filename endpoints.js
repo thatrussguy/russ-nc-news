@@ -71,7 +71,7 @@ exports.apiDescription = {
   },
   "GET /api/articles/:article_id/comments": {
     description: "serves an array of comments for article",
-    queries: ["sort_by", "order"],
+    queries: ["sort_by", "order", "limit", "p"],
     exampleResponse: {
       comments: [
         {

@@ -234,7 +234,7 @@ describe("/", () => {
           describe("GET", () => {
             it("200 - returns an array of comments under key 'comments'", () => {
               return request
-                .get("/api/articles/1/comments")
+                .get("/api/articles/1/comments?limit=20")
                 .expect(200)
                 .then(({ body }) => {
                   expect(body).to.contain.keys("comments");
@@ -289,6 +289,22 @@ describe("/", () => {
                 .expect(200)
                 .then(({ body }) => {
                   expect(body.comments).to.deep.equal([]);
+                });
+            });
+            it("200 - accepts a 'limit' query which defaults to 10", () => {
+              return request
+                .get("/api/articles/1/comments?limit=5")
+                .expect(200)
+                .then(({ body }) => {
+                  expect(body.comments.length).to.equal(5);
+                });
+            });
+            it("200 - accepts a 'p' query which specifies the page to display and defaults to 1", () => {
+              return request
+                .get("/api/articles/1/comments?p=2")
+                .expect(200)
+                .then(({ body }) => {
+                  expect(body.comments.length).to.equal(3);
                 });
             });
           });
