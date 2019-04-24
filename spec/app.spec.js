@@ -77,7 +77,7 @@ describe("/", () => {
             .expect(404)
             .then(({ body }) => {
               expect(body.message).to.equal(
-                'No articles match query: {"author":"not-an-author"}'
+                "No articles match query: { author : not-an-author }"
               );
             });
         });
@@ -95,7 +95,7 @@ describe("/", () => {
             .expect(404)
             .then(({ body }) => {
               expect(body.message).to.equal(
-                'No articles match query: {"topic":"not-a-topic"}'
+                "No articles match query: { topic : not-a-topic }"
               );
             });
         });

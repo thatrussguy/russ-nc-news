@@ -14,7 +14,9 @@ exports.getArticles = (req, res, next) => {
       if (!articles.articles.length)
         return Promise.reject({
           status: 404,
-          message: `No articles match query: ${JSON.stringify(req.query)}`
+          message: `No articles match query: ${JSON.stringify(
+            req.query
+          ).replace(/"/g, " ")}`
         });
       else res.send(articles);
     })
