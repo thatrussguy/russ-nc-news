@@ -1,22 +1,22 @@
-exports.routeNotFound = (req, res) => {
+exports.routeNotFound = (_, res) => {
   res.status(404).send({ msg: "Route Not Found" });
 };
 
-exports.methodNotAllowed = (req, res) => {
+exports.methodNotAllowed = (_, res) => {
   res.status(405).send({ msg: "Method Not Allowed" });
 };
 
-exports.handle500 = (err, req, res, next) => {
+exports.handle500 = (err, _, res, _next) => {
   console.log(err);
   res.status(500).send({ msg: "Internal Server Error" });
 };
 
-exports.handleCustomErrors = (err, req, res, next) => {
+exports.handleCustomErrors = (err, _, res, next) => {
   if (err.status) res.status(err.status).send({ message: err.message });
   else next(err);
 };
 
-exports.handlePsqlErrors = (err, req, res, next) => {
+exports.handlePsqlErrors = (err, _, res, next) => {
   if (err.code) {
     const errorReference = {
       "23503": { status: 404, message: err.detail },

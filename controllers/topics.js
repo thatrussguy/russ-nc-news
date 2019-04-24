@@ -1,6 +1,6 @@
 const selectTopics = require("../models/topics");
 
-exports.getTopics = (req, res, next) => {
+exports.getTopics = (_, res, next) => {
   selectTopics()
     .then(topics => res.send(topics))
     .catch(next);
