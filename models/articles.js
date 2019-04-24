@@ -1,18 +1,28 @@
 const connection = require("../db/connection");
 
-const selectArticles = () => {
+const selectArticles = ({
+  author,
+  topic,
+  sort_by = "created_at",
+  order = "desc"
+}) => {
   return connection("articles")
     .select(
-      "articles.article_id",
-      "articles.author",
-      "articles.created_at",
+      "articles.article_id AS article_id",
+      "articles.author AS author",
+      "articles.created_at AS created_at",
       "title",
       "topic",
-      "articles.votes"
+      "articles.votes AS votes"
     )
     .leftJoin("comments", "comments.article_id", "=", "articles.article_id")
     .count("comments.article_id AS comment_count")
     .groupBy("articles.article_id")
+    .orderBy(sort_by, order)
+    .modify(query => {
+      if (author) query.where({ "articles.author": author });
+      if (topic) query.where({ topic });
+    })
     .then(articles => ({ articles }));
 };
 const selectArticleById = articleId => {

@@ -2,10 +2,14 @@ process.env.NODE_ENV = "test";
 
 const { expect } = require("chai");
 const supertest = require("supertest");
+const chai = require("chai");
+const chaiSorted = require("chai-sorted");
 
 const app = require("../app");
 const connection = require("../db/connection");
 const request = supertest(app);
+
+chai.use(chaiSorted);
 
 describe("/", () => {
   beforeEach(() => connection.seed.run());
@@ -33,23 +37,57 @@ describe("/", () => {
       });
     });
     describe("/articles", () => {
-      it("GET status:200 returns a list of articles under key 'articles'", () => {
-        return request
-          .get("/api/articles")
-          .expect(200)
-          .then(({ body }) => {
-            expect(body).to.contain.keys("articles");
-            expect(body.articles).to.be.an("array");
-            expect(body.articles[0]).to.contain.keys(
-              "author",
-              "title",
-              "article_id",
-              "topic",
-              "created_at",
-              "votes",
-              "comment_count"
-            );
-          });
+      describe("GET", () => {
+        it("200 - returns a list of articles under key 'articles'", () => {
+          return request
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("articles");
+              expect(body.articles).to.be.an("array");
+              expect(body.articles[0]).to.contain.keys(
+                "author",
+                "title",
+                "article_id",
+                "topic",
+                "created_at",
+                "votes",
+                "comment_count"
+              );
+            });
+        });
+        it("200 - accepts an 'author' query", () => {
+          return request
+            .get("/api/articles?author=butter_bridge")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles.length).to.equal(3);
+            });
+        });
+        it("200 - accepts a 'topic' query", () => {
+          return request
+            .get("/api/articles?topic=mitch")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles.length).to.equal(11);
+            });
+        });
+        it("200 - accepts a 'sort_by' query which defaults to 'created_at'", () => {
+          return request
+            .get("/api/articles?sort_by=title")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles).to.be.descendingBy("title");
+            });
+        });
+        it("200 - accepts an 'order' query which defaults to 'desc'", () => {
+          return request
+            .get("/api/articles?order=asc")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles).to.be.ascendingBy("created_at");
+            });
+        });
       });
       describe("/:article_id", () => {
         it("GET status:200 returns an article object under key 'article", () => {
