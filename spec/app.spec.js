@@ -17,12 +17,15 @@ describe("/", () => {
 
   describe("/api", () => {
     describe("GET", () => {
-      it("200", () => {
+      it("200 - a json representation of all the available endpoints of the api", () => {
         return request
           .get("/api")
           .expect(200)
           .then(({ body }) => {
-            expect(body.ok).to.equal(true);
+            expect(body).to.contain.keys("GET /api");
+            expect(body["GET /api"].description).to.equal(
+              "serves up a json representation of all the available endpoints of the api"
+            );
           });
       });
     });
