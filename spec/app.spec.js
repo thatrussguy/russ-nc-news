@@ -171,7 +171,7 @@ describe("/", () => {
                 );
               });
           });
-          it("404 if article_id is not in database", () => {
+          it("404 - if article_id is not in database", () => {
             return request
               .get("/api/articles/1000")
               .expect(404)
@@ -179,7 +179,7 @@ describe("/", () => {
                 expect(body.message).to.equal("No such article: 1000");
               });
           });
-          it("400 if article_id is not a number", () => {
+          it("400 - if article_id is not a number", () => {
             return request
               .get("/api/articles/abcd")
               .expect(400)
@@ -189,7 +189,7 @@ describe("/", () => {
                 );
               });
           });
-          it("400 if article_id is out of range", () => {
+          it("400 - if article_id is out of range", () => {
             return request
               .get("/api/articles/2147483648")
               .expect(400)
@@ -381,7 +381,7 @@ describe("/", () => {
                 expect(body.message).to.equal("No such comment: 1000");
               });
           });
-          it("400 if article_id is not a number or out of range", () => {
+          it("400 - if article_id is not a number or out of range", () => {
             return request
               .patch("/api/comments/abcd")
               .send({ inc_votes: 10 })
@@ -410,7 +410,7 @@ describe("/", () => {
                 expect(body.message).to.equal("No such comment: 1000");
               });
           });
-          it("400 if article_id is not a number or out of range", () => {
+          it("400 - if article_id is not a number or out of range", () => {
             return request
               .delete("/api/comments/abcd")
               .expect(400)
