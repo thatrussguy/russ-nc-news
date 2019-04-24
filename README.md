@@ -18,17 +18,55 @@ Install dependencies
 npm install
 ```
 
-Start the server locally
+Start the app locally
 
 ```bash
 npm run start
 ```
 
+The app should now running on [http://localhost:9090](http://localhost:9090)
+
 Make a http GET request to /api for endpoint descriptions
+
+## Deploying to Heroku
+
+Start the app locally
+
+```bash
+heroku local web
+```
+
+The app should now running on [http://localhost:5000](http://localhost:5000)
+
+Log in to Heroku
+
+```bash
+heroku login
+```
+
+Create Heroku project
+
+```bash
+heroku create
+```
+
+Deploy new Heroku project
+
+```bash
+git push heroku master
+```
+
+Launch in browser
+
+```bash
+heroku open
+```
 
 ## Prerequisites
 
-[Node.JS](https://nodejs.org)
+- [Node.JS](https://nodejs.org)
+- [Heroku account](https://signup.heroku.com/signup/dc)
+- [Heroku CLI](https://cli.heroku.com/)
 
 ## Running the tests
 
