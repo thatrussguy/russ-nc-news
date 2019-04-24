@@ -79,6 +79,7 @@ npm test
 ## Built With
 
 - [Node.JS](https://nodejs.org)
+- [generator-knexpress](https://github.com/AnthonyMedina/generator-knexpress)
 - [Express](https://expressjs.com/)
 - [Knex.js](https://knexjs.org)
 - [PostgreSQL](https://www.postgresql.org/)
