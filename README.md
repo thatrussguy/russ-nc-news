@@ -63,7 +63,7 @@ heroku run knex seed:run
 Launch in browser
 
 ```bash
-heroku open
+heroku open /api
 ```
 
 ## Prerequisites
