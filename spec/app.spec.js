@@ -256,9 +256,15 @@ describe("/", () => {
                 .get("/api/articles/1000/comments")
                 .expect(404)
                 .then(({ body }) => {
-                  expect(body.message).to.equal(
-                    "No comments for article: 1000"
-                  );
+                  expect(body.message).to.equal("No such article: 1000");
+                });
+            });
+            it("200 - comments array is empty if article exists but has no comments", () => {
+              return request
+                .get("/api/articles/2/comments")
+                .expect(200)
+                .then(({ body }) => {
+                  expect(body.comments).to.deep.equal([]);
                 });
             });
           });

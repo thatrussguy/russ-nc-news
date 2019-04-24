@@ -45,20 +45,24 @@ exports.patchArticleById = (req, res, next) => {
 };
 exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
-  selectCommentsByArticleId(article_id, req.query)
-    .then(comments => {
-      if (!comments.comments.length)
+  selectArticleById(article_id)
+    .then(article => {
+      if (!article.article)
         return Promise.reject({
           status: 404,
-          message: `No comments for article: ${article_id}`
+          message: `No such article: ${article_id}`
         });
-      else res.send(comments);
+      else return selectCommentsByArticleId(article_id, req.query);
+    })
+    .then(comments => {
+      res.send(comments);
     })
     .catch(next);
 };
 exports.postCommentByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body;
+
   insertCommentByArticleId(article_id, username, body)
     .then(comment => res.status(201).send(comment))
     .catch(next);
