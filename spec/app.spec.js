@@ -84,6 +84,16 @@ describe("/", () => {
               expect(body.articles).to.be.descendingBy("title");
             });
         });
+        it("400 - if 'sort_by' references a non-existent column", () => {
+          return request
+            .get("/api/articles?sort_by=nonsense")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'error: column "nonsense" does not exist'
+              );
+            });
+        });
         it("200 - accepts an 'order' query which defaults to 'desc'", () => {
           return request
             .get("/api/articles?order=asc")
@@ -153,6 +163,16 @@ describe("/", () => {
                 expect(body.article.votes).to.equal(110);
               });
           });
+          it("400 - if inc_votes is missing or invalid", () => {
+            return request
+              .patch("/api/articles/1")
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal(
+                  'error: invalid input syntax for integer: "NaN"'
+                );
+              });
+          });
         });
         describe("/comments", () => {
           describe("GET", () => {
@@ -179,6 +199,16 @@ describe("/", () => {
                 .expect(200)
                 .then(({ body }) => {
                   expect(body.comments).to.be.descendingBy("comment_id");
+                });
+            });
+            it("400 - if 'sort_by' references a non-existent column", () => {
+              return request
+                .get("/api/articles/1/comments?sort_by=nonsense")
+                .expect(400)
+                .then(({ body }) => {
+                  expect(body.message).to.equal(
+                    'error: column "nonsense" does not exist'
+                  );
                 });
             });
             it("200 - accepts an 'order' query which defaults to 'desc'", () => {
@@ -214,6 +244,16 @@ describe("/", () => {
                   expect(body.comment.votes).to.equal(0);
                 });
             });
+            it("400 - if username or body is missing", () => {
+              return request
+                .post("/api/articles/1/comments")
+                .expect(400)
+                .then(({ body }) => {
+                  expect(body.message).to.equal(
+                    'error: null value in column "body" violates not-null constraint'
+                  );
+                });
+            });
           });
         });
       });
@@ -230,6 +270,16 @@ describe("/", () => {
                 expect(body.comment.votes).to.equal(26);
               });
           });
+          it("400 - if inc_votes is missing or invalid", () => {
+            return request
+              .patch("/api/comments/1")
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal(
+                  'error: invalid input syntax for integer: "NaN"'
+                );
+              });
+          });
           it("404 - if comment_id is not in database", () => {
             return request
               .patch("/api/comments/1000")
@@ -237,6 +287,17 @@ describe("/", () => {
               .expect(404)
               .then(({ body }) => {
                 expect(body.message).to.equal("No such comment: 1000");
+              });
+          });
+          it("400 if article_id is not a number or out of range", () => {
+            return request
+              .patch("/api/comments/abcd")
+              .send({ inc_votes: 10 })
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal(
+                  'error: invalid input syntax for integer: "abcd"'
+                );
               });
           });
         });
@@ -247,6 +308,24 @@ describe("/", () => {
               .expect(204)
               .then(({ body }) => {
                 expect(body).to.deep.equal({});
+              });
+          });
+          it("404 - if comment_id is not in database", () => {
+            return request
+              .delete("/api/comments/1000")
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.message).to.equal("No such comment: 1000");
+              });
+          });
+          it("400 if article_id is not a number or out of range", () => {
+            return request
+              .delete("/api/comments/abcd")
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal(
+                  'error: invalid input syntax for integer: "abcd"'
+                );
               });
           });
         });
@@ -268,6 +347,14 @@ describe("/", () => {
                   "name"
                 );
                 expect(body.user.username).to.equal("lurker");
+              });
+          });
+          it("404 - if username is not in database", () => {
+            return request
+              .get("/api/users/russ")
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.message).to.equal("No such user: russ");
               });
           });
         });
