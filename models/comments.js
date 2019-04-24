@@ -16,7 +16,7 @@ const insertCommentByArticleId = (article_id, author, body) => {
     .returning("*")
     .then(([comment]) => ({ comment }));
 };
-const updateCommentById = (comment_id, votes) => {
+const updateCommentById = (comment_id, votes = 0) => {
   return connection("comments")
     .where({ comment_id })
     .increment({ votes })

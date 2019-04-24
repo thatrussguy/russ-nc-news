@@ -320,9 +320,18 @@ describe("/", () => {
                 expect(body.comment.votes).to.equal(26);
               });
           });
-          it("400 - if inc_votes is missing or invalid", () => {
+          it("200 - returns the unchanged article if inc_votes is missing", () => {
             return request
               .patch("/api/comments/1")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comment.votes).to.equal(16);
+              });
+          });
+          it("400 - if inc_votes is invalid", () => {
+            return request
+              .patch("/api/comments/1")
+              .send({ inc_votes: "abc" })
               .expect(400)
               .then(({ body }) => {
                 expect(body.message).to.equal(
