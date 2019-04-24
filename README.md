@@ -24,7 +24,9 @@ Start the server locally
 npm run start
 ```
 
-### Prerequisites
+Make a http GET request to /api for endpoint descriptions
+
+## Prerequisites
 
 [Node.JS](https://nodejs.org)
 
