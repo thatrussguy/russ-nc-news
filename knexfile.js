@@ -12,7 +12,7 @@ const baseConfig = {
 
 const customConfigs = {
   development: {
-    connection: {
+    connection: process.env.DATABASE_URL || {
       database: "russ_nc_news"
     }
   },
