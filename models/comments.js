@@ -1,9 +1,13 @@
 const connection = require("../db/connection");
 
-const selectCommentsByArticleId = article_id => {
+const selectCommentsByArticleId = (
+  article_id,
+  { sort_by = "created_at", order = "desc" }
+) => {
   return connection("comments")
     .select("comment_id", "author", "body", "created_at", "votes")
     .where({ article_id })
+    .orderBy(sort_by, order)
     .then(comments => ({ comments }));
 };
 const insertCommentByArticleId = (article_id, author, body) => {

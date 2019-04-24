@@ -119,22 +119,40 @@ describe("/", () => {
             });
         });
         describe("/comments", () => {
-          it("GET status:200 returns an array of comments under key 'comments", () => {
-            return request
-              .get("/api/articles/1/comments")
-              .expect(200)
-              .then(({ body }) => {
-                expect(body).to.contain.keys("comments");
-                expect(body.comments).to.be.an("array");
-                expect(body.comments[0]).to.contain.keys(
-                  "comment_id",
-                  "votes",
-                  "created_at",
-                  "author",
-                  "body"
-                );
-                expect(body.comments.length).to.equal(13);
-              });
+          describe("GET", () => {
+            it("200 - returns an array of comments under key 'comments'", () => {
+              return request
+                .get("/api/articles/1/comments")
+                .expect(200)
+                .then(({ body }) => {
+                  expect(body).to.contain.keys("comments");
+                  expect(body.comments).to.be.an("array");
+                  expect(body.comments[0]).to.contain.keys(
+                    "comment_id",
+                    "votes",
+                    "created_at",
+                    "author",
+                    "body"
+                  );
+                  expect(body.comments.length).to.equal(13);
+                });
+            });
+            it("200 - accepts a 'sort_by' query which defaults to 'created_at'", () => {
+              return request
+                .get("/api/articles/1/comments?sort_by=comment_id")
+                .expect(200)
+                .then(({ body }) => {
+                  expect(body.comments).to.be.descendingBy("comment_id");
+                });
+            });
+            it("200 - accepts an 'order' query which defaults to 'desc'", () => {
+              return request
+                .get("/api/articles/1/comments?order=asc")
+                .expect(200)
+                .then(({ body }) => {
+                  expect(body.comments).to.be.ascendingBy("created_at");
+                });
+            });
           });
           it("POST status:201 inserts a comment with username/body from the request body and returns the new comment", () => {
             return request
