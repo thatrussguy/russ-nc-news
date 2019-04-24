@@ -4,7 +4,9 @@ const selectArticles = ({
   author,
   topic,
   sort_by = "created_at",
-  order = "desc"
+  order = "desc",
+  limit = 10,
+  p = 1
 }) => {
   return connection("articles")
     .select(
@@ -23,7 +25,10 @@ const selectArticles = ({
       if (author) query.where({ "articles.author": author });
       if (topic) query.where({ topic });
     })
-    .then(articles => ({ articles }));
+    .then(articles => ({
+      articles: articles.slice((p - 1) * limit, p * limit),
+      total_count: articles.length
+    }));
 };
 const selectArticleById = articleId => {
   return connection("articles")

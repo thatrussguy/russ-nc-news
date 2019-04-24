@@ -83,7 +83,7 @@ describe("/", () => {
         });
         it("200 - accepts a 'topic' query", () => {
           return request
-            .get("/api/articles?topic=mitch")
+            .get("/api/articles?topic=mitch&limit=20")
             .expect(200)
             .then(({ body }) => {
               expect(body.articles.length).to.equal(11);
@@ -123,6 +123,30 @@ describe("/", () => {
             .expect(200)
             .then(({ body }) => {
               expect(body.articles).to.be.ascendingBy("created_at");
+            });
+        });
+        it("200 - accepts a 'limit' query which defaults to 10", () => {
+          return request
+            .get("/api/articles?limit=5")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles.length).to.equal(5);
+            });
+        });
+        it("200 - accepts a 'p' query which specifies the page to display and defaults to 1", () => {
+          return request
+            .get("/api/articles?p=2")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.articles.length).to.equal(2);
+            });
+        });
+        it("200 - includes a 'total_count' property equal to the total number of matching articles regardless of limit/page", () => {
+          return request
+            .get("/api/articles?p=2")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.total_count).to.equal(12);
             });
         });
       });

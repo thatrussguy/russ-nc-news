@@ -17,7 +17,7 @@ exports.apiDescription = {
   },
   "GET /api/articles": {
     description: "serves an array of all articles",
-    queries: ["author", "topic", "sort_by", "order"],
+    queries: ["author", "topic", "sort_by", "order", "limit", "p"],
     exampleResponse: {
       articles: [
         {
@@ -29,7 +29,8 @@ exports.apiDescription = {
           votes: 0,
           comment_count: "6"
         }
-      ]
+      ],
+      total_count: 1
     }
   },
   "GET /api/articles/:article_id": {
