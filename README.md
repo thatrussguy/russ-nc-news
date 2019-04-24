@@ -18,6 +18,18 @@ Install dependencies
 npm install
 ```
 
+Set up databases
+
+```bash
+npm run setup-dbs
+```
+
+Seed database
+
+```bash
+npm run seed
+```
+
 Start the app locally
 
 ```bash
