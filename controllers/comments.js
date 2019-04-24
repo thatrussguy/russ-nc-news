@@ -6,7 +6,10 @@ exports.patchCommentById = (req, res, next) => {
   updateCommentById(comment_id, inc_votes)
     .then(comment => {
       if (!comment.comment)
-        next({ status: 404, message: `No such comment: ${comment_id}` });
+        return Promise.reject({
+          status: 404,
+          message: `No such comment: ${comment_id}`
+        });
       else res.send(comment);
     })
     .catch(next);
@@ -17,7 +20,7 @@ exports.deleteCommentById = (req, res, next) => {
     .then(rowsAffected => {
       if (rowsAffected === 1) res.sendStatus(204);
       else
-        handleCustomErrors({
+        return Promise.reject({
           status: 404,
           message: `No such comment: ${comment_id}`
         });

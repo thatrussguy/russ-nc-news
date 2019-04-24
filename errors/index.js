@@ -7,11 +7,15 @@ exports.methodNotAllowed = (req, res) => {
 };
 
 exports.handle500 = (err, req, res, next) => {
-  console.log(err);
   res.status(500).send({ msg: "Internal Server Error" });
 };
 
 exports.handleCustomErrors = (err, req, res, next) => {
   if (err.status) res.status(err.status).send({ message: err.message });
+  else next(err);
+};
+
+exports.handlePsqlErrors = (err, req, res, next) => {
+  if (err.code) res.status(400).send({ message: err.stack.split("\n")[0] });
   else next(err);
 };

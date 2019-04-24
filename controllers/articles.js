@@ -19,7 +19,12 @@ exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   selectArticleById(article_id)
     .then(article => {
-      res.send(article);
+      if (!article.article)
+        return Promise.reject({
+          status: 404,
+          message: `No such article: ${article_id}`
+        });
+      else res.send(article);
     })
     .catch(next);
 };

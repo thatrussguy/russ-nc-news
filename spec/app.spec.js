@@ -114,6 +114,34 @@ describe("/", () => {
                 );
               });
           });
+          it("404 if article_id is not in database", () => {
+            return request
+              .get("/api/articles/1000")
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.message).to.equal("No such article: 1000");
+              });
+          });
+          it("400 if article_id is not a number", () => {
+            return request
+              .get("/api/articles/abcd")
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal(
+                  'error: invalid input syntax for integer: "abcd"'
+                );
+              });
+          });
+          it("400 if article_id is out of range", () => {
+            return request
+              .get("/api/articles/2147483648")
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal(
+                  'error: value "2147483648" is out of range for type integer'
+                );
+              });
+          });
         });
         describe("PATCH", () => {
           it("200 - increments votes by the amount specified by inc_votes in the body and returns the updated article", () => {
