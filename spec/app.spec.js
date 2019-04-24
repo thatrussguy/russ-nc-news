@@ -16,24 +16,28 @@ describe("/", () => {
   after(() => connection.destroy());
 
   describe("/api", () => {
-    it("GET status:200", () => {
-      return request
-        .get("/api")
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.ok).to.equal(true);
-        });
-    });
-    describe("/topics", () => {
-      it("GET status:200 returns a list of topics under key 'topics'", () => {
+    describe("GET", () => {
+      it("200", () => {
         return request
-          .get("/api/topics")
+          .get("/api")
           .expect(200)
           .then(({ body }) => {
-            expect(body).to.contain.keys("topics");
-            expect(body.topics).to.be.an("array");
-            expect(body.topics[0]).to.contain.keys("slug", "description");
+            expect(body.ok).to.equal(true);
           });
+      });
+    });
+    describe("/topics", () => {
+      describe("GET", () => {
+        it("200 - returns a list of topics under key 'topics'", () => {
+          return request
+            .get("/api/topics")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("topics");
+              expect(body.topics).to.be.an("array");
+              expect(body.topics[0]).to.contain.keys("slug", "description");
+            });
+        });
       });
     });
     describe("/articles", () => {
@@ -90,33 +94,37 @@ describe("/", () => {
         });
       });
       describe("/:article_id", () => {
-        it("GET status:200 returns an article object under key 'article", () => {
-          return request
-            .get("/api/articles/1")
-            .expect(200)
-            .then(({ body }) => {
-              expect(body).to.contain.keys("article");
-              expect(body.article).to.be.an("object");
-              expect(body.article).to.contain.keys(
-                "author",
-                "title",
-                "article_id",
-                "body",
-                "topic",
-                "created_at",
-                "votes",
-                "comment_count"
-              );
-            });
+        describe("GET", () => {
+          it("200 - returns an article object under key 'article", () => {
+            return request
+              .get("/api/articles/1")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body).to.contain.keys("article");
+                expect(body.article).to.be.an("object");
+                expect(body.article).to.contain.keys(
+                  "author",
+                  "title",
+                  "article_id",
+                  "body",
+                  "topic",
+                  "created_at",
+                  "votes",
+                  "comment_count"
+                );
+              });
+          });
         });
-        it("PATCH status:200 increments votes by the amount specified by inc_votes in the body and returns the updated article", () => {
-          return request
-            .patch("/api/articles/1")
-            .send({ inc_votes: 10 })
-            .expect(200)
-            .then(({ body }) => {
-              expect(body.article.votes).to.equal(110);
-            });
+        describe("PATCH", () => {
+          it("200 - increments votes by the amount specified by inc_votes in the body and returns the updated article", () => {
+            return request
+              .patch("/api/articles/1")
+              .send({ inc_votes: 10 })
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.article.votes).to.equal(110);
+              });
+          });
         });
         describe("/comments", () => {
           describe("GET", () => {
@@ -154,28 +162,30 @@ describe("/", () => {
                 });
             });
           });
-          it("POST status:201 inserts a comment with username/body from the request body and returns the new comment", () => {
-            return request
-              .post("/api/articles/1/comments")
-              .send({ username: "lurker", body: "lurker's comment" })
-              .expect(201)
-              .then(({ body }) => {
-                expect(body).to.contain.keys("comment");
-                expect(body.comment).to.be.an("object");
-                expect(body.comment).to.contain.keys(
-                  "comment_id",
-                  "votes",
-                  "created_at",
-                  "author",
-                  "body",
-                  "article_id"
-                );
-                expect(body.comment.article_id).to.equal(1);
-                expect(body.comment.author).to.equal("lurker");
-                expect(body.comment.body).to.equal("lurker's comment");
-                expect(body.comment.comment_id).to.equal(19);
-                expect(body.comment.votes).to.equal(0);
-              });
+          describe("POST", () => {
+            it("201 - inserts a comment with username/body from the request body and returns the new comment", () => {
+              return request
+                .post("/api/articles/1/comments")
+                .send({ username: "lurker", body: "lurker's comment" })
+                .expect(201)
+                .then(({ body }) => {
+                  expect(body).to.contain.keys("comment");
+                  expect(body.comment).to.be.an("object");
+                  expect(body.comment).to.contain.keys(
+                    "comment_id",
+                    "votes",
+                    "created_at",
+                    "author",
+                    "body",
+                    "article_id"
+                  );
+                  expect(body.comment.article_id).to.equal(1);
+                  expect(body.comment.author).to.equal("lurker");
+                  expect(body.comment.body).to.equal("lurker's comment");
+                  expect(body.comment.comment_id).to.equal(19);
+                  expect(body.comment.votes).to.equal(0);
+                });
+            });
           });
         });
       });
@@ -216,20 +226,22 @@ describe("/", () => {
     });
     describe("/users", () => {
       describe("/:username", () => {
-        it("GET status:200 returns a user object under key 'user'", () => {
-          return request
-            .get("/api/users/lurker")
-            .expect(200)
-            .then(({ body }) => {
-              expect(body).to.contain.keys("user");
-              expect(body.user).to.be.an("object");
-              expect(body.user).to.contain.keys(
-                "username",
-                "avatar_url",
-                "name"
-              );
-              expect(body.user.username).to.equal("lurker");
-            });
+        describe("GET", () => {
+          it("200 - returns a user object under key 'user'", () => {
+            return request
+              .get("/api/users/lurker")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body).to.contain.keys("user");
+                expect(body.user).to.be.an("object");
+                expect(body.user).to.contain.keys(
+                  "username",
+                  "avatar_url",
+                  "name"
+                );
+                expect(body.user.username).to.equal("lurker");
+              });
+          });
         });
       });
     });
