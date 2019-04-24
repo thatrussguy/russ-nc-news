@@ -35,7 +35,7 @@ const selectArticleById = articleId => {
     .first()
     .then(article => ({ article }));
 };
-const updateArticleById = (article_id, votes) => {
+const updateArticleById = (article_id, votes = 0) => {
   return connection("articles")
     .where({ article_id })
     .increment({ votes });

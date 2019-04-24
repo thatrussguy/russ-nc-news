@@ -11,7 +11,12 @@ const {
 exports.getArticles = (req, res, next) => {
   selectArticles(req.query)
     .then(articles => {
-      res.send(articles);
+      if (!articles.articles.length)
+        return Promise.reject({
+          status: 404,
+          message: `No articles match query: ${JSON.stringify(req.query)}`
+        });
+      else res.send(articles);
     })
     .catch(next);
 };
@@ -42,7 +47,12 @@ exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   selectCommentsByArticleId(article_id, req.query)
     .then(comments => {
-      res.send(comments);
+      if (!comments.comments.length)
+        return Promise.reject({
+          status: 404,
+          message: `No comments for article: ${article_id}`
+        });
+      else res.send(comments);
     })
     .catch(next);
 };

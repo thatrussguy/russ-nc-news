@@ -68,12 +68,32 @@ describe("/", () => {
               expect(body.articles.length).to.equal(3);
             });
         });
+        it("404 - if author queried not in database", () => {
+          return request
+            .get("/api/articles?author=not-an-author")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'No articles match query: {"author":"not-an-author"}'
+              );
+            });
+        });
         it("200 - accepts a 'topic' query", () => {
           return request
             .get("/api/articles?topic=mitch")
             .expect(200)
             .then(({ body }) => {
               expect(body.articles.length).to.equal(11);
+            });
+        });
+        it("404 - if topic queried not in database", () => {
+          return request
+            .get("/api/articles?topic=not-a-topic")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'No articles match query: {"topic":"not-a-topic"}'
+              );
             });
         });
         it("200 - accepts a 'sort_by' query which defaults to 'created_at'", () => {
@@ -163,9 +183,18 @@ describe("/", () => {
                 expect(body.article.votes).to.equal(110);
               });
           });
-          it("400 - if inc_votes is missing or invalid", () => {
+          it("200 - returns the unchanged article if inc_votes is missing", () => {
             return request
               .patch("/api/articles/1")
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.article.votes).to.equal(100);
+              });
+          });
+          it("400 - if inc_votes invalid", () => {
+            return request
+              .patch("/api/articles/1")
+              .send({ inc_votes: "abc" })
               .expect(400)
               .then(({ body }) => {
                 expect(body.message).to.equal(
@@ -219,6 +248,16 @@ describe("/", () => {
                   expect(body.comments).to.be.ascendingBy("created_at");
                 });
             });
+            it("404 - if 'article_id' is not in database", () => {
+              return request
+                .get("/api/articles/1000/comments")
+                .expect(404)
+                .then(({ body }) => {
+                  expect(body.message).to.equal(
+                    "No comments for article: 1000"
+                  );
+                });
+            });
           });
           describe("POST", () => {
             it("201 - inserts a comment with username/body from the request body and returns the new comment", () => {
@@ -251,6 +290,17 @@ describe("/", () => {
                 .then(({ body }) => {
                   expect(body.message).to.equal(
                     'error: null value in column "body" violates not-null constraint'
+                  );
+                });
+            });
+            it("404 - if 'article_id' is not in database", () => {
+              return request
+                .post("/api/articles/1000/comments")
+                .send({ username: "lurker", body: "lurker's comment" })
+                .expect(404)
+                .then(({ body }) => {
+                  expect(body.message).to.equal(
+                    'Key (article_id)=(1000) is not present in table "articles".'
                   );
                 });
             });

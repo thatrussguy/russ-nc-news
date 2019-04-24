@@ -11,7 +11,8 @@ exports.up = function(knex, Promise) {
     commentsTable
       .string("author")
       .references("username")
-      .inTable("users");
+      .inTable("users")
+      .notNullable();
     commentsTable.timestamp("created_at").defaultTo(knex.fn.now());
   });
 };

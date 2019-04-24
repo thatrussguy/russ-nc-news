@@ -16,6 +16,19 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handlePsqlErrors = (err, req, res, next) => {
-  if (err.code) res.status(400).send({ message: err.stack.split("\n")[0] });
-  else next(err);
+  if (err.code) {
+    const errorReference = {
+      "23503": { status: 404, message: err.detail },
+      "22P02": { status: 400, message: err.stack.split("\n")[0] },
+      "42703": { status: 400, message: err.stack.split("\n")[0] },
+      "22003": { status: 400, message: err.stack.split("\n")[0] },
+      "23502": { status: 400, message: err.stack.split("\n")[0] }
+    };
+    res
+      .status(errorReference[err.code].status || 500)
+      .send(
+        { message: errorReference[err.code].message } ||
+          `Unknown PSQL error ${err.code}`
+      );
+  } else next(err);
 };
