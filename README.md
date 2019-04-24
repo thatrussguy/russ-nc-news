@@ -30,14 +30,6 @@ Make a http GET request to /api for endpoint descriptions
 
 ## Deploying to Heroku
 
-Start the app locally
-
-```bash
-heroku local web
-```
-
-The app should now running on [http://localhost:5000](http://localhost:5000)
-
 Log in to Heroku
 
 ```bash
@@ -50,10 +42,40 @@ Create Heroku project
 heroku create
 ```
 
+Add a PostgreSQL database
+
+```bash
+heroku addons:create heroku-postgresql:hobby-dev
+```
+
+Find your database URL
+
+```bash
+heroku pg:credentials:url <database_url>
+```
+
+Set Heroku DATABASE_URL environment variable
+
+```bash
+heroku config:set DATABASE_URL='<the_database_url_from_the_last_step>' -a <app_name>
+```
+
+Set NODE_ENV to 'development' (no production data available yet)
+
+```bash
+heroku config:set NODE_ENV=development
+```
+
 Deploy new Heroku project
 
 ```bash
 git push heroku master
+```
+
+Seed database
+
+```bash
+heroku run knex seed:run
 ```
 
 Launch in browser
