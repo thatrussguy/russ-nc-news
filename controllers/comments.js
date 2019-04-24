@@ -5,7 +5,8 @@ exports.patchCommentById = (req, res, next) => {
   const { inc_votes } = req.body;
   updateCommentById(comment_id, inc_votes)
     .then(comment => {
-      if (!comment.comment) next({ status: 400, message: "No such comment" });
+      if (!comment.comment)
+        next({ status: 404, message: `No such comment: ${comment_id}` });
       else res.send(comment);
     })
     .catch(next);
@@ -13,6 +14,13 @@ exports.patchCommentById = (req, res, next) => {
 exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params;
   removeCommentById(comment_id)
-    .then(res.status(204).send())
+    .then(rowsAffected => {
+      if (rowsAffected === 1) res.sendStatus(204);
+      else
+        handleCustomErrors({
+          status: 404,
+          message: `No such comment: ${comment_id}`
+        });
+    })
     .catch(next);
 };

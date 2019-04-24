@@ -183,7 +183,7 @@ describe("/", () => {
     describe("/comments", () => {
       describe("/:comment_id", () => {
         describe("PATCH", () => {
-          it("status:200 increments votes by the amount specified by inc_votes in the body and returns the updated comment", () => {
+          it("200 - increments votes by the amount specified by inc_votes in the body and returns the updated comment", () => {
             return request
               .patch("/api/comments/1")
               .send({ inc_votes: 10 })
@@ -192,32 +192,25 @@ describe("/", () => {
                 expect(body.comment.votes).to.equal(26);
               });
           });
-          it("status:400 if comment_id is not in database", () => {
+          it("404 - if comment_id is not in database", () => {
             return request
               .patch("/api/comments/1000")
               .send({ inc_votes: 10 })
-              .expect(400)
+              .expect(404)
               .then(({ body }) => {
-                expect(body.message).to.equal("No such comment");
+                expect(body.message).to.equal("No such comment: 1000");
               });
           });
         });
-        it("DELETE status:204 deletes the comment and returns nothing", () => {
-          return request
-            .delete("/api/comments/1")
-            .expect(204)
-            .then(({ body }) => {
-              expect(body).to.deep.equal({});
-            })
-            .then(_ => {
-              return request
-                .patch("/api/comments/1")
-                .send({ inc_votes: 10 })
-                .expect(400)
-                .then(({ body }) => {
-                  expect(body.message).to.equal("No such comment");
-                });
-            });
+        describe("DELETE", () => {
+          it("204 - deletes the comment and returns nothing", () => {
+            return request
+              .delete("/api/comments/1")
+              .expect(204)
+              .then(({ body }) => {
+                expect(body).to.deep.equal({});
+              });
+          });
         });
       });
     });
