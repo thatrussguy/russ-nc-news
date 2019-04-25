@@ -7,7 +7,6 @@ exports.methodNotAllowed = (_, res) => {
 };
 
 exports.handle500 = (err, _, res, _next) => {
-  console.log(err);
   res.status(500).send({ msg: "Internal Server Error" });
 };
 
@@ -20,6 +19,7 @@ exports.handlePsqlErrors = (err, _, res, next) => {
   if (err.code) {
     const errorReference = {
       "23503": { status: 404, message: err.detail },
+      "23505": { status: 409, message: err.detail },
       "22P02": { status: 400, message: err.stack.split("\n")[0] },
       "42703": { status: 400, message: err.stack.split("\n")[0] },
       "22003": { status: 400, message: err.stack.split("\n")[0] },

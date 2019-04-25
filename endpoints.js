@@ -15,6 +15,18 @@ exports.apiDescription = {
       ]
     }
   },
+  "POST /api/topics": {
+    description: "inserts a new topic and serves the new topic",
+    queries: [],
+    exampleResponse: {
+      topic: [
+        {
+          slug: "new topic",
+          description: "new topic description"
+        }
+      ]
+    }
+  },
   "GET /api/articles": {
     description: "serves an array of all articles",
     queries: ["author", "topic", "sort_by", "order", "limit", "p"],

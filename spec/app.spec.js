@@ -42,6 +42,48 @@ describe("/", () => {
             });
         });
       });
+      describe("POST", () => {
+        it("201 - inserts a topic properties from request body and returns the new topic", () => {
+          return request
+            .post("/api/topics")
+            .send({
+              slug: "test",
+              description: "test topic"
+            })
+            .expect(201)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("topic");
+              expect(body.topic).to.be.an("object");
+              expect(body.topic).to.contain.keys("slug", "description");
+              expect(body.topic.slug).to.equal("test");
+              expect(body.topic.description).to.equal("test topic");
+            });
+        });
+        it("400 - if missing any properties from req.body", () => {
+          return request
+            .post("/api/topics")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'error: null value in column "slug" violates not-null constraint'
+              );
+            });
+        });
+        it("409 - if topic already exists", () => {
+          return request
+            .post("/api/topics")
+            .send({
+              slug: "mitch",
+              description: "another mitch"
+            })
+            .expect(409)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                "Key (slug)=(mitch) already exists."
+              );
+            });
+        });
+      });
     });
     describe("/articles", () => {
       describe("GET", () => {
