@@ -566,6 +566,55 @@ describe("/", () => {
       });
     });
     describe("/users", () => {
+      describe("POST", () => {
+        it("201 - inserts a user with properties from request body and returns the new user", () => {
+          return request
+            .post("/api/users")
+            .send({
+              username: "test",
+              avatar_url: "test avatar url",
+              name: "test name"
+            })
+            .expect(201)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("user");
+              expect(body.user).to.be.an("object");
+              expect(body.user).to.contain.keys(
+                "username",
+                "avatar_url",
+                "name"
+              );
+              expect(body.user.username).to.equal("test");
+              expect(body.user.avatar_url).to.equal("test avatar url");
+              expect(body.user.name).to.equal("test name");
+            });
+        });
+        it("400 - if missing any properties from req.body", () => {
+          return request
+            .post("/api/users")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'error: null value in column "username" violates not-null constraint'
+              );
+            });
+        });
+        it("409 - if user already exists", () => {
+          return request
+            .post("/api/users")
+            .send({
+              username: "lurker",
+              avatar_url: "new avatar url",
+              name: "same old lurker"
+            })
+            .expect(409)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                "Key (username)=(lurker) already exists."
+              );
+            });
+        });
+      });
       describe("/:username", () => {
         describe("GET", () => {
           it("200 - returns a user object under key 'user'", () => {

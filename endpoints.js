@@ -18,13 +18,15 @@ exports.apiDescription = {
   "POST /api/topics": {
     description: "inserts a new topic and serves the new topic",
     queries: [],
+    "req.body": {
+      slug: "string",
+      description: "string"
+    },
     exampleResponse: {
-      topic: [
-        {
-          slug: "new topic",
-          description: "new topic description"
-        }
-      ]
+      topic: {
+        slug: "new topic",
+        description: "new topic description"
+      }
     }
   },
   "GET /api/articles": {
@@ -158,6 +160,22 @@ exports.apiDescription = {
     description: "deletes comment and serves no response",
     queries: [],
     exampleResponse: {}
+  },
+  "POST /api/users": {
+    description: "inserts a new user and serves the new user",
+    queries: [],
+    "req.body": {
+      username: "string",
+      avatar_url: "string",
+      name: "string"
+    },
+    exampleResponse: {
+      user: {
+        username: "new username",
+        avatar_url: "new avatar URL",
+        name: "new name"
+      }
+    }
   },
   "GET /api/users/:username": {
     description: "serves a user object",
