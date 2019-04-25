@@ -45,5 +45,16 @@ const updateArticleById = (article_id, votes = 0) => {
     .where({ article_id })
     .increment({ votes });
 };
+const insertArticle = ({ title, body, topic, author }) => {
+  return connection("articles")
+    .insert({ title, body, topic, author })
+    .returning("*")
+    .then(([{ article_id }]) => selectArticleById(article_id));
+};
 
-module.exports = { selectArticles, selectArticleById, updateArticleById };
+module.exports = {
+  selectArticles,
+  selectArticleById,
+  updateArticleById,
+  insertArticle
+};

@@ -150,6 +150,62 @@ describe("/", () => {
             });
         });
       });
+      describe("POST", () => {
+        it("201 - inserts an article with properties from request body and returns the new article", () => {
+          return request
+            .post("/api/articles")
+            .send({
+              title: "test",
+              body: "test article",
+              topic: "mitch",
+              author: "lurker"
+            })
+            .expect(201)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("article");
+              expect(body.article).to.be.an("object");
+              expect(body.article).to.contain.keys(
+                "article_id",
+                "title",
+                "body",
+                "topic",
+                "author"
+              );
+              expect(body.article.article_id).to.equal(13);
+              expect(body.article.author).to.equal("lurker");
+              expect(body.article.title).to.equal("test");
+              expect(body.article.body).to.equal("test article");
+              expect(body.article.votes).to.equal(0);
+              expect(body.article.comment_count).to.equal("0");
+            });
+        });
+        it("400 - if missing any properties from req.body", () => {
+          return request
+            .post("/api/articles")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'error: null value in column "title" violates not-null constraint'
+              );
+            });
+        });
+        it("404 - if topic or author are not in database", () => {
+          return request
+            .post("/api/articles")
+            .send({
+              title: "test",
+              body: "test article",
+              topic: "non-existent",
+              author: "lurker"
+            })
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'Key (topic)=(non-existent) is not present in table "topics".'
+              );
+            });
+        });
+      });
       describe("/:article_id", () => {
         describe("GET", () => {
           it("200 - returns an article object under key 'article", () => {

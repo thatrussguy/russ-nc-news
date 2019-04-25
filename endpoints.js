@@ -33,6 +33,27 @@ exports.apiDescription = {
       total_count: 1
     }
   },
+  "POST /api/articles": {
+    description: "inserts a new article and serves the new article",
+    queries: [],
+    "req.body": {
+      title: "string",
+      body: "string",
+      topic: "string",
+      author: "string"
+    },
+    exampleResponse: {
+      article: {
+        article_id: 37,
+        author: "weegembump",
+        created_at: "2018-05-30T15:59:13.341Z",
+        title: "New cooking article",
+        topic: "cooking",
+        votes: 0,
+        comment_count: "0"
+      }
+    }
+  },
   "GET /api/articles/:article_id": {
     description: "serves an article object",
     queries: [],
@@ -54,7 +75,7 @@ exports.apiDescription = {
     description:
       "increments article votes by inc_votes and serves updated article",
     queries: [],
-    "req.body": [{ inc_votes: "integer" }],
+    "req.body": { inc_votes: "integer" },
     exampleResponse: {
       article: {
         article_id: 1,
@@ -88,7 +109,7 @@ exports.apiDescription = {
   "POST /api/articles/:article_id/comments": {
     description: "inserts a new comment for article and serves the new comment",
     queries: [],
-    "req.body": [{ username: "string", body: "string" }],
+    "req.body": { username: "string", body: "string" },
     exampleResponse: {
       comment: {
         comment_id: 301,
@@ -104,7 +125,7 @@ exports.apiDescription = {
     description:
       "increments comment votes by inc_votes and serves updated comment",
     queries: [],
-    "req.body": [{ inc_votes: "integer" }],
+    "req.body": { inc_votes: "integer" },
     exampleResponse: {
       comment: {
         comment_id: 301,
