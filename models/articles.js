@@ -25,10 +25,8 @@ const selectArticles = ({
       if (author) query.where({ "articles.author": author });
       if (topic) query.where({ topic });
     })
-    .then(articles => ({
-      articles: articles.slice((p - 1) * limit, p * limit),
-      total_count: articles.length
-    }));
+    .limit(limit)
+    .offset((p - 1) * limit);
 };
 const selectArticleById = articleId => {
   return connection("articles")
@@ -57,10 +55,21 @@ const removeArticleById = article_id => {
     .where({ article_id });
 };
 
+const countArticles = ({ author, topic }) => {
+  return connection("articles")
+    .count("article_id AS total_count")
+    .modify(query => {
+      if (author) query.where({ "articles.author": author });
+      if (topic) query.where({ topic });
+    })
+    .then(([{ total_count }]) => total_count);
+};
+
 module.exports = {
   selectArticles,
   selectArticleById,
   updateArticleById,
   insertArticle,
-  removeArticleById
+  removeArticleById,
+  countArticles
 };

@@ -188,7 +188,7 @@ describe("/", () => {
             .get("/api/articles?p=2")
             .expect(200)
             .then(({ body }) => {
-              expect(body.total_count).to.equal(12);
+              expect(body.total_count).to.equal("12");
             });
         });
       });

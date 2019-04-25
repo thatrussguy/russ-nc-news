@@ -3,7 +3,8 @@ const {
   selectArticleById,
   updateArticleById,
   insertArticle,
-  removeArticleById
+  removeArticleById,
+  countArticles
 } = require("../models/articles");
 const {
   selectCommentsByArticleId,
@@ -11,16 +12,16 @@ const {
 } = require("../models/comments");
 
 exports.getArticles = (req, res, next) => {
-  selectArticles(req.query)
-    .then(articles => {
-      if (!articles.articles.length)
+  Promise.all([selectArticles(req.query), countArticles(req.query)])
+    .then(([articles, total_count]) => {
+      if (!articles.length)
         return Promise.reject({
           status: 404,
           message: `No articles match query: ${JSON.stringify(
             req.query
           ).replace(/"/g, " ")}`
         });
-      else res.send(articles);
+      else res.send({ articles, total_count });
     })
     .catch(next);
 };
