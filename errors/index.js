@@ -16,6 +16,7 @@ exports.handleCustomErrors = (err, _, res, next) => {
 };
 
 exports.handlePsqlErrors = (err, _, res, next) => {
+  console.log(err);
   if (err.code) {
     const errorReference = {
       "23503": { status: 404, message: err.detail },
@@ -23,7 +24,8 @@ exports.handlePsqlErrors = (err, _, res, next) => {
       "22P02": { status: 400, message: err.stack.split("\n")[0] },
       "42703": { status: 400, message: err.stack.split("\n")[0] },
       "22003": { status: 400, message: err.stack.split("\n")[0] },
-      "23502": { status: 400, message: err.stack.split("\n")[0] }
+      "23502": { status: 400, message: err.stack.split("\n")[0] },
+      "22001": { status: 400, message: err.stack.split("\n")[0] }
     };
     res
       .status(errorReference[err.code].status || 500)
