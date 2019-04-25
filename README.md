@@ -2,9 +2,11 @@
 
 [Project on Heroku](https://nameless-garden-54007.herokuapp.com/api)
 
-A restful API to be used in the Northcoders News Sprint during the Front End block of the course.
+This API will power the frontend of my NC News app. NC News will be a reddit-style app with users/topics/articles/comments.
 
 ## Getting Started
+
+#### Set up a local copy to try out the API
 
 Clone the project
 
@@ -40,42 +42,33 @@ The app should now running on [http://localhost:9090](http://localhost:9090)
 
 Make a http GET request to /api for endpoint descriptions
 
-## Deploying to Heroku
+## Using the API
 
-Log in to Heroku
+The following endpoints are available
 
-```bash
-heroku login
-```
+```http
+GET /api
 
-Create Heroku project
+GET /api/topics
+POST /api/topics
 
-```bash
-heroku create
-```
+GET /api/articles
+POST /api/articles
 
-Add a PostgreSQL database
+GET /api/articles/:article_id
+PATCH /api/articles/:article_id
+DELETE /api/articles/:article_id
 
-```bash
-heroku addons:create heroku-postgresql:hobby-dev
-```
+GET /api/articles/:article_id/comments
+POST /api/articles/:article_id/comments
 
-Deploy new Heroku project
+PATCH /api/comments/:comment_id
+DELETE /api/comments/:comment_id
 
-```bash
-git push heroku master
-```
+POST /api/users
+GET /api/users
 
-Seed database
-
-```bash
-heroku run knex seed:run
-```
-
-Launch in browser
-
-```bash
-heroku open /api
+GET /api/users/:username
 ```
 
 ## Prerequisites
