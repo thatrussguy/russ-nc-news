@@ -16,7 +16,6 @@ exports.handleCustomErrors = (err, _, res, next) => {
 };
 
 exports.handlePsqlErrors = (err, _, res, next) => {
-  console.log(err);
   if (err.code) {
     const errorReference = {
       "23503": { status: 404, message: err.detail },
