@@ -206,6 +206,34 @@ describe("/", () => {
             });
         });
       });
+      describe("DELETE", () => {
+        it("204 - deletes the article and returns nothing", () => {
+          return request
+            .delete("/api/articles/1")
+            .expect(204)
+            .then(({ body }) => {
+              expect(body).to.deep.equal({});
+            });
+        });
+        it("404 - if article_id is not in database", () => {
+          return request
+            .delete("/api/articles/1000")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.message).to.equal("No such article: 1000");
+            });
+        });
+        it("400 - if article_id is not a number or out of range", () => {
+          return request
+            .delete("/api/articles/abcd")
+            .expect(400)
+            .then(({ body }) => {
+              expect(body.message).to.equal(
+                'error: invalid input syntax for integer: "abcd"'
+              );
+            });
+        });
+      });
       describe("/:article_id", () => {
         describe("GET", () => {
           it("200 - returns an article object under key 'article", () => {

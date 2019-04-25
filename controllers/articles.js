@@ -2,7 +2,8 @@ const {
   selectArticles,
   selectArticleById,
   updateArticleById,
-  insertArticle
+  insertArticle,
+  removeArticleById
 } = require("../models/articles");
 const {
   selectCommentsByArticleId,
@@ -70,9 +71,21 @@ exports.postCommentByArticleId = (req, res, next) => {
     .then(comment => res.status(201).send(comment))
     .catch(next);
 };
-
 exports.postArticle = (req, res, next) => {
   insertArticle(req.body)
     .then(article => res.status(201).send(article))
+    .catch(next);
+};
+exports.deleteArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  removeArticleById(article_id)
+    .then(rowsAffected => {
+      if (rowsAffected === 1) res.sendStatus(204);
+      else
+        return Promise.reject({
+          status: 404,
+          message: `No such article: ${article_id}`
+        });
+    })
     .catch(next);
 };

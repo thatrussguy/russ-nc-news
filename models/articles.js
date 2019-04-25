@@ -51,10 +51,16 @@ const insertArticle = ({ title, body, topic, author }) => {
     .returning("*")
     .then(([{ article_id }]) => selectArticleById(article_id));
 };
+const removeArticleById = article_id => {
+  return connection("articles")
+    .delete()
+    .where({ article_id });
+};
 
 module.exports = {
   selectArticles,
   selectArticleById,
   updateArticleById,
-  insertArticle
+  insertArticle,
+  removeArticleById
 };

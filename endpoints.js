@@ -90,6 +90,11 @@ exports.apiDescription = {
       }
     }
   },
+  "DELETE /api/articles/:article_id": {
+    description: "deletes article and serves no response",
+    queries: [],
+    exampleResponse: {}
+  },
   "GET /api/articles/:article_id/comments": {
     description: "serves an array of comments for article",
     queries: ["sort_by", "order", "limit", "p"],

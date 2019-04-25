@@ -6,7 +6,8 @@ exports.up = function(knex, _) {
     commentsTable
       .integer("article_id")
       .references("article_id")
-      .inTable("articles");
+      .inTable("articles")
+      .onDelete("CASCADE");
     commentsTable
       .string("author")
       .references("username")
