@@ -615,6 +615,22 @@ describe("/", () => {
             });
         });
       });
+      describe("GET", () => {
+        it("200 - returns a list of users under key 'users'", () => {
+          return request
+            .get("/api/users")
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.contain.keys("users");
+              expect(body.users).to.be.an("array");
+              expect(body.users[0]).to.contain.keys(
+                "username",
+                "avatar_url",
+                "name"
+              );
+            });
+        });
+      });
       describe("/:username", () => {
         describe("GET", () => {
           it("200 - returns a user object under key 'user'", () => {

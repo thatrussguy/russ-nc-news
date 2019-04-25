@@ -12,5 +12,8 @@ const insertUser = ({ username, avatar_url, name }) => {
     .returning("*")
     .then(([user]) => ({ user }));
 };
+const selectUsers = () => {
+  return connection("users").then(users => ({ users }));
+};
 
-module.exports = { selectUserById, insertUser };
+module.exports = { selectUserById, insertUser, selectUsers };
