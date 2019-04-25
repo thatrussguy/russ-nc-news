@@ -177,6 +177,20 @@ exports.apiDescription = {
       }
     }
   },
+  "GET /api/users": {
+    description: "serves an array of all users",
+    queries: [],
+    exampleResponse: {
+      users: [
+        {
+          username: "weegembump",
+          avatar_url:
+            "https://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg",
+          name: "Gemma Bump"
+        }
+      ]
+    }
+  },
   "GET /api/users/:username": {
     description: "serves a user object",
     queries: [],
