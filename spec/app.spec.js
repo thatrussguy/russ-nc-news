@@ -1,7 +1,6 @@
 process.env.NODE_ENV = "test";
 
 const { expect } = require("chai");
-const supertest = require("supertest");
 const chai = require("chai");
 const chaiSorted = require("chai-sorted");
 
