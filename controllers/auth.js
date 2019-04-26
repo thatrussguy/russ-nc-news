@@ -11,3 +11,14 @@ exports.authenticateUser = (req, res, next) => {
     res.send({ token });
   }
 };
+exports.checkToken = (req, _, next) => {
+  const { authorization } = req.headers;
+  let token;
+  if (authorization) {
+    token = authorization.split(" ")[1];
+  }
+  jwt.verify(token, JWT_SECRET, (err, _) => {
+    if (err) next({ status: 401, message: "Unauthorised" });
+    else next();
+  });
+};
