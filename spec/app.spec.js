@@ -7,12 +7,26 @@ const chaiSorted = require("chai-sorted");
 
 const app = require("../app");
 const connection = require("../db/connection");
-const request = supertest(app);
+const defaults = require("superagent-defaults");
+const request = defaults(require("supertest")(app));
 
 chai.use(chaiSorted);
 
 describe("/", () => {
-  beforeEach(() => connection.seed.run());
+  beforeEach(() =>
+    connection.seed
+      .run()
+      .then(() =>
+        request
+          .post("/api/login")
+          .expect(200)
+          .send({ username: "username", password: "password" })
+      )
+      .then(({ body: { token } }) => {
+        request.set("Authorization", `BEARER ${token}`);
+      })
+  );
+
   after(() => connection.destroy());
 
   describe("/api", () => {
@@ -657,6 +671,34 @@ describe("/", () => {
               });
           });
         });
+      });
+    });
+    describe("/login", () => {
+      describe("POST", () => {
+        it("200 - responds with an access token given correct username and password", () =>
+          request
+            .post("/api/login")
+            .send({ username: "username", password: "password" })
+            .expect(200)
+            .then(({ body }) => {
+              expect(body).to.have.ownProperty("token");
+            }));
+        it("401 - for an incorrect password", () =>
+          request
+            .post("/api/login")
+            .send({ username: "username", password: "wrongpassword" })
+            .expect(401)
+            .then(({ body: { message } }) => {
+              expect(message).to.equal("invalid username or password");
+            }));
+        it("401 - for an incorrect username", () =>
+          request
+            .post("/api/login")
+            .send({ username: "nobody", password: "password" })
+            .expect(401)
+            .then(({ body: { message } }) => {
+              expect(message).to.equal("invalid username or password");
+            }));
       });
     });
   });
