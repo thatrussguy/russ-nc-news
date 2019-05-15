@@ -24,7 +24,8 @@ exports.handlePsqlErrors = (err, _, res, next) => {
       "42703": { status: 400, message: err.stack.split("\n")[0] },
       "22003": { status: 400, message: err.stack.split("\n")[0] },
       "23502": { status: 400, message: err.stack.split("\n")[0] },
-      "22001": { status: 400, message: err.stack.split("\n")[0] }
+      "22001": { status: 400, message: err.stack.split("\n")[0] },
+      "2201X": { status: 400, message: err.stack.split("\n")[0] }
     };
     res
       .status(errorReference[err.code].status || 500)
