@@ -1,6 +1,6 @@
 # Northcoders News API
 
-[Project on Heroku](https://nameless-garden-54007.herokuapp.com/api)
+[Project on Heroku](https://russ-nc-news-api.herokuapp.com/api)
 
 This API will power the frontend of my NC News app. NC News will be a reddit-style app with users/topics/articles/comments.
 
