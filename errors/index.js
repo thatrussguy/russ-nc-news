@@ -30,8 +30,7 @@ exports.handlePsqlErrors = (err, _, res, next) => {
     res
       .status(errorReference[err.code].status || 500)
       .send(
-        { message: errorReference[err.code].message } ||
-          `Unknown PSQL error ${err.code}`
+        { message: errorReference[err.code].message || `Unknown PSQL error ${err.code}`} 
       );
   } else next(err);
 };
