@@ -29,7 +29,7 @@
     "chai-sorted": "^0.2.0",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
-    "supertest": "^6.0.0"
+    "supertest": "^6.0.1"
   },
   "engines": {
     "node": "11.x"
