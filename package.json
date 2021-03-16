@@ -25,7 +25,7 @@
     "pg": "^8.5.1"
   },
   "devDependencies": {
-    "chai": "^4.3.3",
+    "chai": "^4.3.4",
     "chai-sorted": "^0.2.0",
     "mocha": "^8.3.1",
     "nodemon": "^2.0.7",
